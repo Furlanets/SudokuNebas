@@ -1,1 +1,9 @@
+.model small
+.data
+
+
+
+
+.code
+
 
