@@ -1,9 +1,0 @@
-.model small
-.data
-
-
-
-
-.code
-
-
