@@ -1,14 +1,14 @@
-TITLE Lucca/22003004        Fernando/
+TITLE Lucca/22003004        Fernando/22010196
 .MODEL SMALL
 
 PULO  MACRO 
-    mov ah,02
-    mov dl,10
+    mov ah,02  
+    mov dl,10 
     int 21H
 ENDM
 
 PUSHR  MACRO 
-    push si
+    push si 
     push dx
     push cx
     push bx
@@ -37,7 +37,7 @@ apagatela MACRO
 ENDM
 
 LIMPAR MACRO
-    XOR AX,AX
+    XOR AX,AX        ;limpa o que esta nos registradores
     XOR BX,BX
     XOR CX,CX
     XOR DX,DX
@@ -45,14 +45,14 @@ LIMPAR MACRO
 ENDM
 
 PRINTM MACRO print
-    MOV AH,09
+    MOV AH,09         ;imprime a mensagem contida
     LEA DX,print
     INT 21H
 ENDM
 
 space MACRO 
-    MOV AH, 02
-    MOV DL, 32
+    MOV AH, 02       ;imprime um espaço
+    MOV DL, 32      
     INT 21H    
 ENDM
 
@@ -115,7 +115,7 @@ ENDM
 .CODE
 
 main PROC
-    MOV AX,@DATA        ;inicialização das matrizes
+    MOV AX,@DATA            ;inicialização das matrizes
     MOV DS,AX
     MOV DX,OFFSET msgx      ;dx é carregado com o offset de MSGX e realiza o print
     MOV AH,09H              
@@ -132,17 +132,17 @@ main PROC
     CMP AL,1                ;realiza uma comparação, se o conteúdo em AL=1, realiza um Jump Equal(JE) para a "SOMA"
     CALL FASE1
 
-    ;CMP AL,2                ;realiza uma comparação, se o conteúdo em AL=2, realiza um Jump Equal(JE) para a "SUBT"
+    ;CMP AL,2               ;realiza uma comparação, se o conteúdo em AL=2, realiza um Jump Equal(JE) para a "SUBT"
     ;JE PENIS2
 
     ;MOV AH,09
     ;LEA DX,msg1
     ;INT 21h
-    ;CALL RECEBA         ;entrada de dados na matriz
+    ;CALL RECEBA            ;entrada de dados na matriz
     ;MOV AH,09
     ;LEA DX,msg2         
     ;INT 21h
-    ;CALL PRINT          ;impressão da matriz           
+    ;CALL PRINT             ;impressão da matriz           
     ;MOV ah,4Ch
     ;INT 21h
 main ENDP
@@ -151,38 +151,38 @@ FASE1 PROC
 
     COMECO:
 
-    LEA BX, MATRIZ1
+    LEA BX, MATRIZ1     ;carrega o endereço da matriz na BX
     
-    CALL PRINT
+    CALL PRINT          ;impressão da matriz
     
     PRINTM msg1
 
-    MOV AH,01H
-    INT 21H
-    SUB AL,30H
+    MOV AH,01H          ;realiza a entrada de um caractere pelo teclado
+    INT 21H 
+    SUB AL,30H          ;realiza subtração para transformar caractere em número
 
-    MOV CX,9
-    MUL CX
-    XOR AH,AH
+    MOV CX,9            ;carrega o valor 9 na CX
+    MUL CX 
+    XOR AH,AH           ;limpa o registrador AH
 
-    MOV BX,AX
-    SUB BX,9
+    MOV BX,AX           ;carrega o valor de AX na BX  
+    SUB BX,9            ;realiza subtração para transformar caractere em número
 
     PRINTM msg2
 
-    MOV AH,01H
-    INT 21H
-    SUB AL,31H
+    MOV AH,01H          ;realiza a entrada de um caractere pelo teclado
+    INT 21H 
+    SUB AL,31H          ;realiza subtração para transformar caractere em número
 
-    XOR AH,AH
-    MOV SI,AX
+    XOR AH,AH           ;limpa o registrador AH
+    MOV SI,AX           ;carrega o valor de AX na SI
 
     PRINTM msg3
 
-    MOV AH,01H
-    INT 21H
+    MOV AH,01H          ;realiza a entrada de um caractere pelo teclado
+    INT 21H 
 
-    SUB AL,30H
+    SUB AL,30H          ;realiza subtração para transformar caractere em número
 
     CALL VERIFICA
     JMP COMECO
@@ -199,24 +199,24 @@ CMP AL,MATRIZ1R[BX][SI]
     
     PRINTM msg4     ;VALOR INCORRETO
 
-    MOV AH,01
-    INT 21H
+    MOV AH,01       ;realiza a entrada de um caractere pelo teclado
+    INT 21H 
     JMP SAIDA
-    XOR AX,AX
+    XOR AX,AX       ;limpa o registrador AX
     
     CORRETO:
     
-    PUSH AX
+    PUSH AX         ;salva o registrador AX
 
     PRINTM msg5      ;VALOR CORRETO
     
-    POP AX
-    ADD AL,30H
+    POP AX          ;restaura o registrador AX
+    ADD AL,30H      ;realiza adição para transformar número em caractere
 
-    MOV MATRIZ1[BX][SI],AL
+    MOV MATRIZ1[BX][SI],AL ;carrega o valor de AL na matriz
 
-    MOV AH,01
-    INT 21H
+    MOV AH,01       ;realiza a entrada de um caractere pelo teclado
+    INT 21H 
 
     SAIDA:
     
@@ -233,41 +233,41 @@ PRINT PROC
         PULO
         PUSHR
 
-        MOV AH,02
-        MOV CX,LINHA
-        MOV DX,30H 
+        MOV AH,02        ;imprime o caractere
+        MOV CX,LINHA     ;carrega o valor de LINHA na CX
+        MOV DX,30H       ;carrega o valor 30H na DX
 
 
        EXTERNO:
-            MOV DI,COLUNA
-            XOR SI,SI
+            MOV DI,COLUNA  ;carrega o valor de COLUNA na DI
+            XOR SI,SI      ;limpa o registrador SI
 
         INTERNO:
 
             FORA:
 
-            CMP BX,0
-            JNE FORA2
-            MOV DL,30H
-            INC DH
-            ADD DL,DH
+            CMP BX,0      ;realiza uma comparação, se o conteúdo em BX=0, realiza um Jump Not Equal(JNE) para a "FORA2"
+            JNE FORA2     ;se o conteúdo em BX for diferente de 0, realiza um Jump Equal(JE) para a "FORA2"
+            MOV DL,30H    ;carrega o valor 30H na DL
+            INC DH        ;realiza incremento no registrador DH
+            ADD DL,DH     ;realiza adição no registrador DL
             INT 21H
 
             FORA2:
 
-            MOV DL, [BX][SI]
+            MOV DL, [BX][SI] ;carrega o valor da matriz na DL
             INT 21H
             INC SI
             DEC DI
 
-            MOV DL,32
+            MOV DL,32        ;carrega o valor 32 na DL
             INT 21H
 
             JNZ INTERNO
 
             PULO
 
-            ADD BX,COLUNA
+            ADD BX,COLUNA    ;realiza adição no registrador BX
 
             LOOP EXTERNO
             POPR
